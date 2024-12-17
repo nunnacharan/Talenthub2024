@@ -176,16 +176,29 @@ const [magicLinks, setMagicLinks] = useState([]);
   const confirmDelete = async () => {
     if (!selectedCandidate) return;
 
+  
+
     try {
+      // First delete the qualifications
+      await axios.delete(`https://5q5faxzgb7.execute-api.ap-south-1.amazonaws.com/api/qualifications/${selectedCandidate.id}`);
+      // Then delete the user skills
+      await axios.delete(`https://5q5faxzgb7.execute-api.ap-south-1.amazonaws.com/api/user_skills/${selectedCandidate.id}`);
+      // Then delete the user certifications
+      await axios.delete(`https://5q5faxzgb7.execute-api.ap-south-1.amazonaws.com/api/user_certifications/${selectedCandidate.id}`);
+      // Then delete the personal details
+      await axios.delete(`https://5q5faxzgb7.execute-api.ap-south-1.amazonaws.com/api/personaldetails/${selectedCandidate.id}`);
+      // Finally delete the user
       await axios.delete(`https://5q5faxzgb7.execute-api.ap-south-1.amazonaws.com/api/candidates/${selectedCandidate.id}`);
+      
       setCandidates(candidates.filter((candidate) => candidate.id !== selectedCandidate.id));
       setSuccessMessageText('Candidate deleted successfully!');
       setShowSuccessMessage(true);
       setIsDeleteModalOpen(false);
       setTimeout(() => setShowSuccessMessage(false), 3000);
-    } catch {
-      alert('Failed to delete candidate');
-    }
+  } catch (error) {
+      alert('Failed to delete candidate and their associated data');
+      console.error('Delete error:', error);
+  }
   };
 
   return (
