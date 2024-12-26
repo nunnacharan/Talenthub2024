@@ -6,49 +6,58 @@ import UserDashboard from './components/UserDashboard';
 import PowerUserDashboard from './components/PowerUserDashboard';
 import OnboardingForm from './components/OnboardingForm';
 import ProtectedRoute from './components/ProtectedRoute';
-import './index.css';
 import CandidateDetails from './components/CandidateDetails';
 import Profile from './components/Profile';
 import SuccessPage from './components/SuccessPage';
 import PowerCandidateDetails from './components/PowerCandidateDetails';
 import UserDetails from './components/UserDetails';
+import { useTheme } from './ThemeContext'; // Ensure this is the correct path
+import './index.css'; // Keep styles imported last for consistency
+import "@radix-ui/themes/styles.css";
+
 
 function App() {
+  const { isDarkMode } = useTheme(); // Access theme context
+
   return (
     <Router>
-      <div className="App">
+      <div className={`min-h-screen ${isDarkMode ? 'dark' : ''} bg-white dark:bg-gray-800 text-black dark:text-white`}>
+        {/* Add ThemeToggleButton to the header or a visible position */}
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Login />} />
-          <Route 
-            path="/admin-dashboard" 
+          <Route path="/onboard" element={<OnboardingForm />} />
+          <Route path="/success" element={<SuccessPage />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/admin-dashboard"
             element={
               <ProtectedRoute>
                 <AdminDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route 
-            path="/user-dashboard" 
+          <Route
+            path="/user-dashboard"
             element={
               <ProtectedRoute>
                 <UserDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
-          <Route path="/onboard" element={<OnboardingForm />} />
-          <Route path="/candidate-details" element={<CandidateDetails />} />
-          <Route path="/power-candidate-details" element={<PowerCandidateDetails />} />
-          <Route path="/user-details" element={<UserDetails />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/success" element={<SuccessPage />} />
-          <Route 
-            path="/power-user-dashboard" 
+          <Route
+            path="/power-user-dashboard"
             element={
               <ProtectedRoute>
                 <PowerUserDashboard />
               </ProtectedRoute>
-            } 
+            }
           />
+          <Route path="/candidate-details" element={<CandidateDetails />} />
+          <Route path="/power-candidate-details" element={<PowerCandidateDetails />} />
+          <Route path="/user-details" element={<UserDetails />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
     </Router>
